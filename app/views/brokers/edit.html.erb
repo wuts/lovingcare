@@ -1,0 +1,22 @@
+<h1>Editing broker</h1>
+
+<%= error_messages_for :broker %>
+
+<% form_for(@broker) do |f| %>
+  <p>
+    <b>User</b><br />
+    <%= f.text_field :user_id %>
+  </p>
+
+  <p>
+    <b>Item</b><br />
+    <%= f.text_field :item_id %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @broker %> |
+<%= link_to 'Back', brokers_path %>

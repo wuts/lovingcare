@@ -1,0 +1,17 @@
+<p>
+  <b>Name:</b>
+  <%=h @iem.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @item.description %>
+</p>
+
+<p>
+  <b>Amount:</b>
+  <%=h @item.amount %>
+</p>
+
+<%= link_to 'Edit', edit_appeal_path(@item) %> |
+<%= link_to 'Back', appeals_path %>

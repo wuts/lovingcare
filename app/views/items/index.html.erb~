@@ -1,0 +1,28 @@
+<h1>Listing items</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Amount</th>
+    <th>Catagory</th>
+    <th>User</th>
+  </tr>
+
+<% for items in @items %>
+  <tr>
+    <td><%=h items.name %></td>
+    <td><%=h items.description %></td>
+    <td><%=h items.amount %></td>
+    <td><%=h items.catagory_id %></td>
+    <td><%=h items.user_id %></td>
+    <td><%= link_to 'Show', items %></td>
+    <td><%= link_to 'Edit', edit_items_path(items) %></td>
+    <td><%= link_to 'Destroy', items, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New items', new_items_path %>

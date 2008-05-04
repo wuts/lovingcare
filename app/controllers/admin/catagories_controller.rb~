@@ -1,0 +1,2 @@
+class Admin::CatagoriesController < ApplicationController
+end

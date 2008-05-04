@@ -1,0 +1,22 @@
+<h1>Listing items</h1>
+
+
+<% for item in @items %>
+  <ul>
+    <li>
+    <div class="float_left"><%= image_tag("/images/default.png",:class=>"img",:size=>"80*120") %></div>
+    <p class="title"><%= link_to "#{item.name}",item %><span class="money">[<%=h item.catagory.name %>]<%=h item.amount %>元</span></p>
+    <p class="catagory"></p>
+    <p class="user">
+    <%- if !item.user.nil? -%>
+     <%=h item.user.login %></p>
+    <%- end -%>
+    <p class="clear"></p>
+    </li>
+  </ul>
+<% end %>
+
+<br />
+
+<%= link_to 'New item', new_item_path %>
+

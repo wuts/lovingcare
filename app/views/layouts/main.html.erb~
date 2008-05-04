@@ -1,0 +1,64 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+ <title>Your Page Title</title>
+ <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <!-- add your meta tags here -->
+
+ <%= stylesheet_link_tag "my_layout" %>
+
+ <!--[if lte IE 7]>
+     <%= stylesheet_link_tag "patch_my_layout" %>
+ <![endif]-->
+  </head>
+  <body>
+   <div id="page_margins">
+   <div id="page">
+    <div id="header">
+       <div id="topnav">
+          <!-- start: skip link navigation -->
+          <a class="skip" title="skip link" href="#navigation">Skip to the navigation</a><span class="hideme">.</span>
+           <a class="skip" title="skip link" href="#content">Skip to the content</a><span class="hideme">.</span>
+         <!-- end: skip link navigation --><a href="#">Login</a> | <a href="#">Contact</a> | <a href="#">Imprint</a>
+         </div>
+        </div>
+        <div id="nav">
+         <!-- skiplink anchor: navigation -->
+        <a id="navigation" name="navigation"></a>
+         <div id="nav_main">
+          <!-- main navigation: #nav_main -->
+           <ul>
+             <li id="current"><a href="/home">首页</a></li>
+             <li><%= link_to "我要求助",{:controller=>"items",:action=>"new",:catagory_id=>1} %></li>
+             <li><%= link_to "我要捐助",{:controller=>"items",:action=>"new",:catagory_id=>2} %></li>
+            <li><a href="#">勤工俭学</a></li>
+
+           </ul>
+        </div>
+         </div>
+      <div id="main">
+         <div id="col1">
+          <div id="col1_content" class="clearfix">
+             <!-- add your content here -->
+              <%= flash[:notice] %>
+               <%= yield %>
+          </div>
+        </div>
+        <div id="col3">
+          <div id="col3_content" class="clearfix">
+             <!-- add your content here -->
+
+           </div>
+
+          <!-- IE Column Clearing -->
+
+            <div id="ie_clearing"> &#160; </div>
+         </div>
+     </div>
+       <!-- begin: #footer -->
+       <div id="footer">Layout based on <a href="http://www.yaml.de/">YAML</a>
+       </div>
+    </div>
+   </div>
+ </body>
+ </html>

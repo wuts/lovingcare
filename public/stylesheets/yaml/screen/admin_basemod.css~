@@ -1,0 +1,46 @@
+   1. @charset "UTF-8";
+   2. /**
+   3.  * "Yet Another Multicolumn Layout" - (X)HTML/CSS framework
+   4.  * (en) stylesheet for screen layout
+   5.  * (de) Stylesheet für das Bildschirm-Layout
+   6.  *
+   7.  * @creator     YAML Builder V1.0 (http://builder.yaml.de)
+   8.  * @file        basemod.css
+   9.  */
+  10.
+  11. @media all
+  12. {
+  13.   /*-------------------------------------------------------------------------*/
+  14.
+  15.   /* (en) Marginal areas & page background */
+  16.   /* (de) Randbereiche & Seitenhintergrund */
+  17.   body { background: #4d87c7 url("images/bg_blue.gif") repeat-x top left fixed; padding: 10px 0; }
+  18.
+  19.   /* Layout Alignment | Layout-Ausrichtung */
+  20.   #page_margins { margin: 0 auto; }
+  21.
+  22.   /* Layout Properties | Layout-Eigenschaften */
+  23.   #page_margins { width: auto;  min-width: 740px; max-width: 90em; background: #fff; }
+  24.   #page { padding: 10px; }
+  25.   #header { padding: 45px 2em 1em 20px; color: #000; background: #fff; }
+  26.   #topnav { color: #aaa; background: transparent; }
+  27.   #nav { overflow:hidden; }
+  28.   #nav_main {  }
+  29.   #main { margin: 10px 0; background: #fff; }
+  30.   #footer { padding: 10px 20px; color:#666; background: #f9f9f9; border-top: 5px #efefef solid; }
+  31.
+  32.   /* (en) navigation: horizontal adjustment | (de) horizontale Ausrichtung  */
+  33.   #nav ul { margin-left: 20px; }
+  34.
+  35.   /*-------------------------------------------------------------------------*/
+  36.
+  37.   /**
+  38.    * (en) Formatting content container
+  39.    * (de) Formatierung der Inhalts-Container
+  40.    *
+  41.    */
+  42.
+  43.   #main { padding: 0px 20px }
+  44.
+  45.   /*-------------------------------------------------------------------------*/
+  46. }

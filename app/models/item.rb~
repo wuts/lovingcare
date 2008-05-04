@@ -1,0 +1,4 @@
+class Item < ActiveRecord::Base
+  belongs_to :catagory
+  belongs_to :user
+end

@@ -1,0 +1,50 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+ <title>Your Page Title</title>
+ <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <!-- add your meta tags here -->
+  <%= javascript_include_tag :defaults %>
+  <%= active_scaffold_includes %>
+  <%= stylesheet_link_tag "admin_layout" %>
+
+ <!--[if lte IE 7]>
+     <%= stylesheet_link_tag "patch_my_layout" %>
+ <![endif]-->
+  </head>
+  <body>
+   <div id="page_margins">
+   <div id="page">
+    <div id="header">
+       <div id="topnav">
+          <!-- start: skip link navigation -->
+          <a class="skip" title="skip link" href="#navigation">Skip to the navigation</a><span class="hideme">.</span>
+           <a class="skip" title="skip link" href="#content">Skip to the content</a><span class="hideme">.</span>
+         <!-- end: skip link navigation --><a href="#">Login</a> | <a href="#">Contact</a> | <a href="#">Imprint</a>
+         </div>
+        </div>
+        <div id="nav">
+         <!-- skiplink anchor: navigation -->
+        <a id="navigation" name="navigation"></a>
+         <div id="nav_main">
+          <!-- main navigation: #nav_main -->
+           <ul>
+            <li id="current"><a href="/admin/items">慈善项目</a>
+             </li>
+              <li><a href="/admin/activities">活动列表</a></li>
+             <li><a href="/admin/users">会员列表</a></li>
+            <li><a href="＃">系统管理</a></li>
+           </ul>
+        </div>
+         </div>
+      <div id="main">
+               <%= yield %>
+         </div>
+     </div>
+       <!-- begin: #footer -->
+       <div id="footer">Loving Care</a>
+       </div>
+    </div>
+   </div>
+ </body>
+ </html>

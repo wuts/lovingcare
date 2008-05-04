@@ -1,0 +1,27 @@
+<p>
+  <b>Name:</b>
+  <%=h @item.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @item.description %>
+</p>
+
+<p>
+  <b>Amount:</b>
+  <%=h @item.amount %>
+</p>
+
+<p>
+  <b>Catagory:</b>
+  <%=h @item.catagory_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%=h @item.user_id %>
+</p>
+
+
+<%= link_to 'Back', home_path %>

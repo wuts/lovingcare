@@ -1,0 +1,13 @@
+<p>
+  <b>User:</b>
+  <%=h @broker.user_id %>
+</p>
+
+<p>
+  <b>Item:</b>
+  <%=h @broker.item_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_broker_path(@broker) %> |
+<%= link_to 'Back', brokers_path %>

@@ -1,0 +1,30 @@
+<h1>Listing items</h1>
+
+
+<% for item in @items %>
+  <ul>
+    <li>
+    <div class="float_left"><%= image_tag("/images/default.png",:class=>"img",:size=>"80*120") %></div>
+    <p class="title"><%= link_to "#{item.name}",item %><span class="money"><% if !item.catagory.nil? -%>
+
+[<%=h item.catagory.name %>]<% end -%><%=h item.amount %>元</span></p>
+
+    <%- if !item.user.nil? -%>
+     <p class="user"><%=h item.user.login %></p>
+    <%- end -%>
+    <p class="clear"></p>
+    </li>
+  </ul>
+<% end %>
+
+<br />
+
+ <div id="col3_content" class="clearfix">
+             <!-- add your content here -->
+             <h1>Top 10 捐助人</h1>
+             <% for donator in @top_donators %>
+               <%= donator.user  %> <%= donator.amount %>
+             <% end %>
+
+  </div>
+

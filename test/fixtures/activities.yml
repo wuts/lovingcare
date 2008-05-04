@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  item_id: 1
+  money: 9.99
+  broker_id: 1
+  property_id: 1
+  status_id: 1
+
+two:
+  user_id: 1
+  item_id: 1
+  money: 9.99
+  broker_id: 1
+  property_id: 1
+  status_id: 1

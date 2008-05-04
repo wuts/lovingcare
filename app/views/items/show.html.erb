@@ -1,0 +1,43 @@
+<p>
+  <b>Name:</b>
+  <%=h @item.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @item.description %>
+</p>
+
+<p>
+  <b>Amount:</b>
+  <%=h @item.amount %>
+</p>
+
+<p>
+  <%= link_to "我要成为代理人",{:controller=>"brokers",:action=>"new",:item_id=>"#{@item.id}"},:class=>"note" %>
+  <%= link_to "我要捐赠",{:controller=>"activities",:action=>"new",:item_id=>"#{@item.id}"},:class=>"note" %>
+</p>
+
+<p>
+  <b>捐赠记录</b>
+  <table>
+    <tr><td>捐赠人</td><td>捐赠金额</td></tr>
+  <% for activity in @item.activities %>
+    <tr>
+     <td><%= activity.user %></td><td><%= activity.money %></td>
+    </tr>
+  <% end %>
+  </table
+</p>
+
+<p>
+  <b>代理人</b>
+  <% for broker in @item.brokers %>
+    <p>
+      <%= link_to "#{broker.user.login}",user_path %>
+    </p>
+  <% end %>
+  <div id="results"></div>
+</p>
+
+<%= link_to 'Back', home_path %>

@@ -1,0 +1,22 @@
+<h1>Listing Appeals</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Amount</th>
+ </tr>
+
+<% for item in @items %>
+  <tr>
+    <td><%=h item.name %></td>
+    <td><%=h item.description %></td>
+    <td><%=h item.amount %></td>
+   </tr>
+<% end %>
+</table>
+
+
+<br />
+
+<%= link_to 'New appeal', new_appeal_path %>

@@ -1,0 +1,788 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+		
+
+
+	
+		
+<head>
+	<title>vaporbase :: stateful authentication</title>
+<!-- begin header block -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Generator" content="Xaraya :: 1.1.0" />
+<meta name="Keywords" content="acts as state machine,restful authentication,--include-activation,-0400,2006,2007,a-simple-workflow-system-using-state-machines,aaron,about,account,accounts,action,actions,activate,activated,activated_at,activating,activation,activation_code,active,activerecord,acts_as_state_machine,actually,add_status_to_usersedit,additional,adjust,admin,admin_required,administrator,after_create,after_saveusernotifier,agilewebdevelopment,ahead,aizatto,allowed,allows,along,also,always,anywhere,appended,application,around,article,articles,assert,assert_difference,assert_not_equal,assumes,asusers,attribute,authenticate,authenticated,authentication,authorization,authorized,automatically-calling-acts_as_state_machine-events-on-update,available,avoid,back,basically,because,before,before_create,before_filter,being,blank,both,call,callback,called,captured,case,certainly,change,changed,changes,check,code,column,columns,comment,compatibility,complete,conditions,confusion,consider,controller,corresponding,could,count,coverage,create,create_user,created,crypted_password,current_user,date,datetime,decided,default,delete,deleted,deliver_signup_notification,destroy,details,dhpeterson,disturbs,do_activate,do_delete,do_deleteadd,does,doesn,doing,double,duty,earlier,either,elitists,email,endadd,endalso,endcomment,enhance,enter,entire,environment,errors,even,event,events,example,exists,extend,extends,fail,features,field,finally,find,find_all_by_status,find_by_activation_code,find_by_email,find_by_email_and_status,first,flash,following,forgot,forgot_password,from,full,full_messages,generate,generated,gets,given,gmail,goes,going,guard,handful,handle,handled,handy,have,helper,here,http,iamruinous,idea,implied,included,includes,info,initial,install,installed,instructions,into,intuitive,john,keeping,known,last,later,leave,lets,like,line,lines,lists,logged,logged_in,login,longer,machine,mailing,make,make_activation_code,make_activation_codewhen,making,mapped,maybe,member,method,migrate,migration,model,modelmake,models,more,move,moves,must,name,named,nbsp,need,needed,new_record,newsletter,next,note,notes,notice,notification,notifierthe,null,objects,observer,okeydokey,omitted,once,only,original,other,others,otherwise,overview,params,passive,password,password_confirmation,password_required,pending,plugin,plugins,post,poster,presence,present,preserve,privileges,proc,projects,protected,provided,purge,quentin,quot,rails,rake,rather,rbedit,rbmove,re-enabled,readme,reason,record,recordin,recordinvalid,records,redirect_back_or_default,redirect_to,redundant,references,regardless,register,registered,registration,remains,remove,rename,render,requested,require,required,rescue,resources,rest,restful-authentication-for-ruby-on-rails-apps,restful-authentication-plugin,restful_authentication,retain,retrieve,reused,right,roles,routes,ruby-on-rails-finite-state-machine-plugin-acts_as_state_machine,save,scope,script,seems,self,sent,separate,separately,sessions,setup,should,sign,signal,signed,signing,signup,since,slideshare,small,some,source,state,state-machine,status,statuses,still,string,stuff,subscription,such,supplying,sure,suspend,suspended,system,techno-weenie,test,test_should_create_passive_user,test_should_delete_user,test_should_register_passive_user,test_should_require_password,test_should_require_password_on_signup,test_should_suspend_user,test_should_unsuspend_user,test_suspended_user_should_not_authenticate,tests,teststo,textdriven,than,thanks,that,their,then,there,these,they,thing,this,through,thus,time,to_s,to_sentence,transition,transitioning,transitions,true,trunk,un-suspended,unique,unless,unsuspend,update,update_attributes,urbanpuddle,user,user_notifier,user_observer,user_test,users,users--,users_controller,users_controller_test,users_url,userscontroller,valid,validated,validation,values,views,want,weblog,well,whatever,when,which,whole,will,with,withadd_column,without,work,your,yourself" />
+<meta name="Description" content="I wanted user records in my app to have various statuses. Here's how I modified restful_authentication with acts_as_state_machine to accomplish this. I'll call it stateful_authentication" />
+<meta name="rating" content="General" />
+
+
+
+<!-- Linking for Mozilla and related browser site tab -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.vaporbase.com/postings/stateful_authentication/?theme=rss" />
+
+
+    <link rel="alternate" type="text/html" title="Print" href="http://www.vaporbase.com/postings/stateful_authentication/?theme=print" />
+
+
+
+<link rel="pingback" href="http://www.vaporbase.com/ws.php" />
+<link rel="Top" type="text/html" href="http://www.vaporbase.com/" />
+<link rel="Parent" type="text/html" href="http://www.vaporbase.com/" />
+<link rel="author" href="vaporbase" />
+
+
+
+
+
+
+
+
+<link rel="search" type="text/html" href="http://www.vaporbase.com/?module=search" />
+<!-- end header block -->	
+	<META name="verify-v1" content="gIEJnlKa0l217XLD0eNgzLkF1/2ZuryOVLyJVHW3/js=" />
+   <base href="http://www.vaporbase.com/" />
+
+
+
+
+<!--  the following styles were supplied from component theme  -->
+<!--  link style  -->
+<link rel="stylesheet" type="text/css" href="http://www.vaporbase.com/themes/tvapor/style/style.css" media="screen" />
+<!--  the following styles were supplied from component module  -->
+<!--  link style  -->
+<link rel="stylesheet" type="text/css" href="http://www.vaporbase.com/modules/bbcode/xarstyles/bbcode.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="http://www.vaporbase.com/modules/comments/xarstyles/comments.css" media="screen" />
+<!--  the following styles were supplied from component common  -->
+<!--  link style  -->
+<link rel="stylesheet" type="text/css" href="http://www.vaporbase.com/modules/base/xarstyles/xarcore-xhtml1-strict.css" media="screen" />
+
+<script type="text/javascript" src="http://www.vaporbase.com/modules/bbcode/xartemplates/includes/bbcode.js"></script></head>
+
+		
+<body>
+	<div id="xb-outer-wrapper">
+           <a name="top"></a>
+					<div id="xb-masthead-page">
+				
+   <div id="xb-masthead-upperleft">
+       <!-- <a href="&xar-baseurl;" title="#$sitename#">home</a> -->
+       <a href="about" title="about us">about</a>
+       <a href="sitecontact" title="contact us">contact</a>
+   </div>
+
+   <div id="xb-masthead-upperright">
+			<div class="xar-block-default">
+<div class="xar-block-body">
+	<form action="http://www.vaporbase.com/?module=authsystem&amp;func=login" method="post" class="xar-margin-none">
+    <p>
+        <input type="hidden" name="redirecturl" id="returnurl4" value="http://www.vaporbase.com/postings/stateful_authentication/" />
+        <label for="uname4" title="Enter your user name">
+            login
+        </label>
+        <input class="textfield" type="text" name="uname" id="uname4" maxlength="64" />
+    </p>
+    <p>
+        <label for="pass4" title="Enter your password">
+            password
+        </label>
+        <input class="textfield" type="password" name="pass" id="pass4" maxlength="64" />
+    </p>
+    <p>
+        <input type="submit" value="Log In" />
+   </p>
+
+<p>
+       <a href="http://www.vaporbase.com/roles/password">lost password?</a>
+   </p>
+                <input type="hidden" name="rememberme" id="rememberme4" value="1" />
+</form>
+</div>
+<div class="xar-block-foot"></div>
+</div><!--        <a href="roles/register?phase=registerform" title="Join now">JOIN NOW</a>
+       <a href="roles" title="Member login"> login</a> -->
+
+	</div>
+
+
+
+<div id="xb-masthead-logo">
+   <a href="http://www.vaporbase.com/" title="vaporbase">
+        <span>vaporbase</span>
+   </a>
+</div>
+			</div>
+					<div id="xb-middle">
+				
+							
+					<div id="xb-content">
+						<div id="xb-home-left">
+							<div class="inner">
+<a href="http://www.vaporbase.com/">home</a>
+<div class="xar-block-default">
+<div class="xar-block-body">
+	
+&bull;&nbsp;
+            <a href="http://www.vaporbase.com/postings/c37/">xaraya</a>
+<br />
+&bull;&nbsp;
+            <a href="http://www.vaporbase.com/postings/c42/">rails</a>
++
+<br />
+&bull;&nbsp;
+            <a href="http://www.vaporbase.com/postings/c43/">django</a>
+<br />
+&bull;&nbsp;
+            <a href="http://www.vaporbase.com/postings/c41/">webdev</a>
+<br />
+&bull;&nbsp;
+            <a href="http://www.vaporbase.com/postings/c38/">xamp</a>
+<br />
+&bull;&nbsp;
+            <a href="http://www.vaporbase.com/postings/c39/">musings</a>
+<br />
+<br />
+</div>
+<div class="xar-block-foot"></div>
+</div><!--
+<h1><a href="#">downloads</a></h1>
+<h1>search</h1>
+-->
+    <div id="xb-search">
+    	<form action="search" method="get">
+    		search
+    		<input type="hidden" name="module" id="module" value="search" />
+    		<input type="text" size="20" name="q" id="mysearch" onfocus="this.value = ''" /> 
+    		<!-- <input type="image" value="Search" src="&xar-baseurl;#$themedir#/images/magnifier-icon.gif" style="margin-bottom:-8px;" /> -->
+    	</form>					
+    </div>
+	
+	<div style="padding-top:50px; color:#999">
+		<a href="postings?theme=rss" title="bookmark link for live rss feed"><img src="themes/tvapor/images/rss-sm.gif" style="position:relative;top:5px" /></a>
+		rss
+	</div>
+	
+	<div style="padding-top:50px; color:#999">
+<div>
+   Tag this page<br />
+  
+<!--    <xar:set name="onclk">"window.open('http://digg.com/submit?phase=2&url=" . xarServerGetCurrentURL() . "&title=" . urlencode($title) . "', 'digg','toolbar=no,width=700,height=400'); return false;"</xar:set>
+    <a href="#$bmark#" title="Digg" onclick="#$onclk#"><img src="#$tdir#/digg.png" /></a> -->
+    <a href="http://digg.com/submit?phase=2&amp;topic=world_news&amp;url=http://www.vaporbase.com/postings/stateful_authentication/&amp;title=vaporbase+%3A%3A+stateful+authentication" title="Digg" ><img src="themes/tvapor/images/digg.png" /></a>
+  
+   &nbsp;
+  
+    <a href="http://del.icio.us/post?url=http://www.vaporbase.com/postings/stateful_authentication/&amp;title=vaporbase+%3A%3A+stateful+authentication" title="Del.icio.us" onclick="window.open('http://del.icio.us/post?v=4&noui&jump=close&url=http://www.vaporbase.com/postings/stateful_authentication/&title=vaporbase+%3A%3A+stateful+authentication', 'delicious','toolbar=no,width=700,height=400'); return false;"><img src="themes/tvapor/images/delicious.png" /></a>
+  
+   &nbsp;
+    <a href="http://reddit.com/submit?url=http://www.vaporbase.com/postings/stateful_authentication/&amp;title=vaporbase+%3A%3A+stateful+authentication" title="reddit" onclick="window.open('http://reddit.com/submit?url=http://www.vaporbase.com/postings/stateful_authentication/&title=vaporbase+%3A%3A+stateful+authentication', 'reddit','toolbar=no,width=700,height=400'); return false;"><img src="themes/tvapor/images/reddit.png" /></a>
+   <br /><br />
+   <!-- <script type="text/javascript" src="http://embed.technorati.com/embed/mkr35272yh.js"></script> -->
+	<a href="http://www.technorati.com/search/http://www.vaporbase.com?cc=mkr35272yh" id="te_lh">» Blogs that link here</a>
+	
+</div>
+</div>
+  
+</div>						</div>
+						<div id="xb-content-main">
+							<div class="display-postings">
+   <div class="date">
+								last modified: Sep 24, 2007 <br />
+					(first posted: Sep 21, 2007)
+						
+				<br />
+	 (9332 Reads)						<br />
+				<span style="color:#999">keywords:</span>
+    <a href="http://www.vaporbase.com/keywords/acts as state machine/">acts as state machine</a>
+    <a href="http://www.vaporbase.com/keywords/restful authentication/">restful authentication</a>
+
+				<br />
+		<a href="postings/141">Permalink</a>
+    </div>
+    <h1>stateful authentication</h1>
+    <div class="summary">I wanted user records in my app to have various statuses. Here's how I modified restful_authentication with acts_as_state_machine to accomplish this. I'll call it stateful_authentication</div>
+    <div class="body"><h4>Overview </h4><p>The idea is to enhance restful_authentication with additional user statuses.</p><ul><li>:passive - not authorized to log in, but known to the system, such as for mailing lists</li><li>:pending - user has registered but has not activated his account yet<br /></li><li>:active - user account is active, user can log in<br /></li><li>:suspended - user account suspended, not allowed to log in, can be re-enabled</li><li>:deleted - user id remains valid but account deleted, login name and email can be reused </li></ul><p>Passive users may have signed up on the system, given their email and name or whatever, but don&#39;t have the right to log in. Passive users can register later with login privileges.</p><p>An active user can log in. (As for roles, authorization is handled separately from authentication, see <a href="postings/Authorization_in_Rails">my earlier post</a> ). </p><p>Any user can be suspended by the administrator, for whatever reason. Suspended accounts can be re-enabled (un-suspended). </p><p>Keeping deleted user records is handy, for example, if some other objects such as a Comment references this user id, you can still retrieve some info about the poster even if he&#39;s no longer around. (A separate admin purge action can actually call destroy on deleted users). A deleted user will have its login and email changed with the string &quot;[DELETED <em>datetime</em>]&quot; appended, so they can be reused in a new user record. </p><pre>&quot;john@gmail.com [DELETED Fri Sep 21 13:35:07 -0400 2007]&quot; </pre><p>In restful_authentication, the User model includes columns for <em>login</em> name, <em>email</em>, <em>crypted_password</em>, <em>activation_code</em> (allows user to active the account), and <em>activated_at</em> date (once account is activated). You could say an :active status is implied when <em>activated_at</em> is not blank?; and a :pending status is implied when <em>activation_code</em> is not blank?.  </p><p>Our case extends this. You could say a :passive status is when both <em>activated_at</em> and <em>activation_code</em> are nil. But any user can be suspended or deleted regardless of these attribute values.</p><h4>Setup </h4><p>This article assumes you have installed the restful_authentication plugin and the acts_as_state_machine plugin. Note, I generated RA to require user activation (--include-activation).</p><pre>  $ script/plugin source <a href="http://svn.techno-weenie.net/projects/plugins" target="_blank">http://svn.techno-weenie.net/projects/plugins</a></pre><pre>  $ script/plugin install restful_authentication</pre><pre>  $ script/generate authenticated user sessions --include-activation</pre><pre>  $ rake db:migrate </pre><pre>add observer to environment.rb </pre><pre>add named routes to routes.rb</pre><pre>move lines from users_controller.rb to application.rb</pre><pre>edit user_notifier.rb as needed </pre><pre>  $ script/plugin install <a href="http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk/" target="_blank">http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk/</a> </pre><p>I&#39;ll leave other details to others, e.g.</p><p>  <a href="http://svn.techno-weenie.net/projects/plugins/restful_authentication/README" target="_blank">http://svn.techno-weenie.net/projects/plugins/restful_authentication/README</a> </p><p>  <a href="http://weblog.techno-weenie.net/2006/8/1/restful-authentication-plugin" target="_blank">http://weblog.techno-weenie.net/2006/8/1/restful-authentication-plugin</a></p><p>  <a href="http://agilewebdevelopment.com/plugins/restful_authentication" target="_blank">http://agilewebdevelopment.com/plugins/restful_authentication</a></p><p>    <a href="http://www.urbanpuddle.com/articles/2007/03/05/restful-authentication-for-ruby-on-rails-apps" target="_blank">http://www.urbanpuddle.com/articles/2007/03/05/restful-authentication-for-ruby-on-rails-apps</a></p><p>  <a href="http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk/README" target="_blank">http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk/README</a> </p><p>  <a href="http://rails.aizatto.com/2007/05/24/ruby-on-rails-finite-state-machine-plugin-acts_as_state_machine/" target="_blank">http://rails.aizatto.com/2007/05/24/ruby-on-rails-finite-state-machine-plugin-acts_as_state_machine/</a></p><p>  <a href="http://www.slideshare.net/dhpeterson/a-simple-workflow-system-using-state-machines" target="_blank">http://www.slideshare.net/dhpeterson/a-simple-workflow-system-using-state-machines</a> </p><p>  <a href="http://iamruinous.com/2007/3/6/automatically-calling-acts_as_state_machine-events-on-update" target="_blank">http://iamruinous.com/2007/3/6/automatically-calling-acts_as_state_machine-events-on-update</a> <br /><br /></p><p>Maybe I should consider making this a whole new plugin, but for now here&#39;s instructions to DIY (do it yourself).</p><h4>User model</h4><p>Make the User a state-machine. First, add a status attribute to the User model (we&#39;ll call it <em>status</em> rather than <em>state</em>)<br /></p><pre>$ script/generate migration add_status_to_users</pre><p>edit with</p><pre>add_column :users, :status, :string, :null =&gt; :no, :default =&gt; &quot;passive&quot; </pre><p>and then<br /></p><pre>$ rake db:migrate </pre><p>&nbsp;</p><p>To models/user.rb, add:</p><pre>  acts_as_state_machine :initial =&gt; :passive, :column =&gt; :status<br />  state :passive<br />  state :pending, :enter =&gt; :make_activation_code<br />  state :active, :enter =&gt; :do_activate<br />  state :suspended<br />  state :deleted, :enter =&gt; :do_delete<br /></pre><p>Add the state machine transition events:</p><pre>  event :register do<br />    transitions :from =&gt; :passive, :to =&gt; :pending, :guard =&gt; Proc.new {|u| !u.crypted_password.blank? }<br />  end<br />  <br />  event :activate do<br />    transitions :from =&gt; :pending, :to =&gt; :active <br />  end<br />  <br />  event :suspend do<br />    transitions :from =&gt; [:passive, :pending, :active], :to =&gt; :suspended<br />  end<br />  <br />  event :delete do<br />    transitions :from =&gt; [:passive, :pending, :active, :suspended], :to =&gt; :deleted<br />  end<br /><br />  event :unsuspend do<br />    transitions :from =&gt; :suspended, :to =&gt; :active, :guard =&gt; Proc.new {|u| !u.activated_at.blank? }<br />    transitions :from =&gt; :suspended, :to =&gt; :pending, :guard =&gt; Proc.new {|u| !u.activation_code.blank? }<br />    transitions :from =&gt; :suspended, :to =&gt; :passive<br />  end<br /> </pre><pre> </pre><p>Thus when a new user is created, it&#39;s :passive. Then, user.register! will move a user from :passive to :pending (provided it has a password), and an activation_code is generated). </p><p>user.activate! will activate the account. To avoid confusion with the original #activate method, rename the old one to #do_activate. And make a small change to preserve the activated_at date (like when transitioning from suspended back to active). <br /> </p><pre>  # rename old activate to do_activate<br />  def do_activate</pre><pre>    @activated = true</pre><pre><em>    self.activated_at ||= Time.now.utc</em></pre><pre><em>    self.activation_code = nil</em><br /> end</pre><p>Also, now the activated? method is handled by our new active? method: <br /></p><pre>  # retain for compatibility, redundant with active?</pre><pre>  def activated?<br />    <em>active?</em></pre><pre>  end</pre><br /><p>Add a do_delete method (can be in protected)</p><pre>    def do_delete<br />      t = Time.now.to_s </pre><pre>      self.login += &quot; [DELETED #{t}]&quot;</pre><pre>      self.email += &quot; [DELETED #{t}]&quot;</pre><pre>    end</pre><p>Comment out the following because a new passive user doesn&#39;t need an activation code. Rather, this gets called in the :pending <em>:enter</em> callback: </p><pre>#before_create :make_activation_code</pre><p>When is password required? In original RA, it was always required if the crypted_password attribute is blank (new user) or if the password is being changed. Now, users don&#39;t need a password unless they&#39;re going to be activating an account, and guard that in the :register event transition. So the password (and password_confirmation) is validated only if it is present, thus, change password_required to</p><pre>    def password_required?</pre><pre>      <em>!password.blank?</em></pre><pre>    end </pre><p>One last thing, we only want to authenticate users who are active. Change self.authenticate to check:</p><pre>  def self.authenticate(login, password)</pre><pre>    <em>u = find :first, :conditions =&gt; [&#39;login = ? and status = &quot;active&quot;&#39;, login]</em></pre><pre>    u &amp;&amp; u.authenticated?(password) ? u : nil</pre><pre>  end</pre><p> Note that anywhere in your code that you do a Users.find, you now need to scope that by the requested state, such as</p><pre>users = User.find_all_by_status(:active)</pre><p>&nbsp;</p><h4>UsersController </h4><p>Okeydokey, next is the controller... </p><p>In users_controller.rb, the create action can now create either a passive or pending user. We&#39;ll use the presence of a password field to signal a new registration otherwise its a passive signup. Note, create does double duty, if the user exists as passive, it still moves ahead (or you could add an update action if this disturbs your REST, see <a href="http://iamruinous.com/2007/3/6/automatically-calling-acts_as_state_machine-events-on-update">this</a> ).  </p><pre>  def create</pre><pre>    @user = User.find_by_email_and_status(params[:user][:email], :passive) if params[:user][:email]</pre><pre>    if @user.nil?</pre><pre>      @user = User.new(params[:user])</pre><pre>      @user.save!</pre><pre>    end</pre><pre>    @user.register! if params[:password]</pre><pre>    self.current_user = @user if @user.pending? # lets user be logged in before activating</pre><pre>    redirect_back_or_default(&#39;/&#39;)</pre><pre>    flash[:notice] = &quot;Thanks for signing up!&quot;</pre><pre>  rescue ActiveRecord::RecordInvalid</pre><pre>    render :action =&gt; &#39;new&#39;</pre><pre>  end</pre><p>(Notes: I decided to key off a unique email rather than login name, seems more intuitive. Could be either. #create must fail if there&#39;s no params[:email]; we let the User.new handle that validation and rescue). </p><p>In the activate action, the only change is call the new <em>#activate!</em> rather than <em>#activate</em></p><pre>  def activate</pre><pre>    self.current_user = User.find_by_activation_code(params[:activation_code])</pre><pre>    if logged_in? &amp;&amp; !current_user.activated?</pre><pre>      <em>current_user.activate!</em></pre><pre>      flash[:notice] = &quot;Signup complete!&quot;</pre><pre>    end</pre><pre>    redirect_back_or_default(&#39;/&#39;)</pre><pre>  end</pre><p> If you&#39;ve included the <a href="http://technoweenie.stikipad.com/plugins/show/Allow+users+to+edit+reset+and+change+passwords">forgot password stuff</a>  then in #forgot_password, change this line:</p><pre>    #if @user = User.find_by_email(params[:user][:email])</pre><pre>    if @user = User.find_by_email_and_status(params[:user][:email], &quot;active&quot;) </pre><p>Finally, we can add #suspend, #unsuspend, #destroy and #purge actions (which should be available only to authorized admin users-- you&#39;ll need your own :admin_required helper for this). <br /> </p><pre>before_filter :admin_required, :only =&gt; [:suspend, :unsuspend, :destroy, :purge]<br /></pre><pre> </pre><pre>  # PUT /users/1/suspend<br />  def suspend<br />    @user = User.find(params[:id])<br />    @user.suspend! <br />    redirect_to(users_url)<br />  end<br /><br />  # PUT /users/1/unsuspend<br />  def unsuspend<br />    @user = User.find(params[:id])<br />    @user.unsuspend! <br />    redirect_to(users_url)<br />  end<br /><br />  # DELETE /users/1<br />  def destroy<br />    @user = User.find(params[:id])<br />    @user.delete!<br />    redirect_to(users_url)<br />  end<br /><br />  # DELETE /users/1/purge<br />  def purge<br />    @user = User.find(params[:id])<br />    @user.destroy<br />    redirect_to(users_url)<br />  end<br /></pre><pre> </pre>Make sure the corresponding routes are mapped in routes.rb. This is how I&#39;m doing it,<pre>    map.resources :users, <br />                :member =&gt; { :suspend =&gt; :put,<br />                             :unsuspend =&gt; :put,<br />                             :purge =&gt; :delete }<br /><br /></pre><p>along with all the other named routes for the RA plugin (e.g. map.signup, map.activate, etc). </p><h4>Observer / Notifier</h4><p>The signup notification email (with activation_code) should be sent only when the user is pending. In user_observer.rb, remove the entire after_create method and add the following line to after_save</p><pre>UserNotifier.deliver_signup_notification(user) if user.pending?</pre><h4>Views </h4><p>You could also adjust your views, but basically now a user can sign up with or without a password. When password is omitted, a passive user is captured (say, for subscription to a newsletter). When password is provided, he goes through full registration. Passive users can register later by supplying his email and a new password.  <br /></p><h4>Tests</h4><p>To get the restful_authentication tests to work with our changes, do the following:</p><p>in users.yml, </p><blockquote><p>    add &quot;status: active&quot; to the quentin user record</p><p>    add &quot;status: pending&quot; to the aaron user record</p></blockquote><p>in user_test.rb:</p><blockquote><p>remove the test_should_require_password, since its not required </p></blockquote><p>in users_controller_test.rb: </p><blockquote><p>    remove the test_should_require_password_on_signup, since its not required </p></blockquote><p>To extend the tests for our new features... well, yes you should do that. Here&#39;s a handful that&#39;d go into user_test.rb, certainly not full coverage.</p><pre>    def test_should_create_passive_user</pre><pre>      assert_difference User, :count do</pre><pre>        user = create_user(:password =&gt; nil, :password_confirmation =&gt; nil)</pre><pre>        assert !user.new_record?, &quot;#{user.errors.full_messages.to_sentence}&quot;</pre><pre>        assert user.passive?</pre><pre>      end</pre><pre>    end     </pre><pre>    def test_should_register_passive_user</pre><pre>        user = create_user(:password =&gt; nil, :password_confirmation =&gt; nil)</pre><pre>        assert user.passive?</pre><pre>        user.update_attributes(:password =&gt; &#39;new password&#39;, :password_confirmation =&gt; &#39;new password&#39;)</pre><pre>        user.register!</pre><pre>        assert user.pending?</pre><pre>    end  </pre><pre>    def test_should_suspend_user</pre><pre>      users(:quentin).suspend!</pre><pre>      assert users(:quentin).suspended?</pre><pre>    end   </pre><pre>    def test_suspended_user_should_not_authenticate</pre><pre>      users(:quentin).suspend!</pre><pre>      assert_not_equal users(:quentin), User.authenticate(&#39;quentin&#39;, &#39;test&#39;)</pre><pre>    end   </pre><pre>    def test_should_unsuspend_user</pre><pre>      users(:quentin).suspend!</pre><pre>      assert users(:quentin).suspended?</pre><pre>      users(:quentin).unsuspend!</pre><pre>      assert users(:quentin).active?</pre><pre>    end   </pre><pre>    def test_should_delete_user</pre><pre>      users(:quentin).delete!</pre><pre>      assert_not_equal users(:quentin).login, &#39;quentin&#39;</pre><pre>      assert_not_equal users(:quentin).email, &#39;quentin@example.com&#39;</pre><pre>      assert users(:quentin).deleted?</pre><pre>    end</pre><p>&nbsp;</p><p>&nbsp;</p></div>
+</div>
+<div class="xar-normal xar-overflow-auto">
+        <a class="xar-floatleft" href="http://www.vaporbase.com/postings/Processing_the_Chickens">&lt;
+prev</a>&#160;            <a class="xar-floatright" href="http://www.vaporbase.com/postings/Beginners_Guide_to_Rspec_on_Story_Runner">
+next&gt;</a>
+</div>
+<div style="font-size:90%; padding: 0 3em 0 20%; text-align:right">
+						
+
+
+
+<div>
+</div>
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="177"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="177" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply177" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>Hendy Irawan</strong>
+ on                 November 06, 2007 12:34 PM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                I would suggest using a datetime column &quot;deleted_at&quot; rather than modifying the fields directly (appending string datetime) if state is deleted.
+
+Using a dedicated &quot;deleted_at&quot; column, not only is the datetime directly retrievable; but developer can still add unique index with two columns (i.e. email and deleted_at). So there can only be one active user with that email, but there can be many deleted users with exact same email. (i.e. the email is reusable if deleted)
+                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=177" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="178"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="178" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply178" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                    linoj on                 November 06, 2007 01:05 PM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#000">
+                Hendy, I agree that seems cleaner. We'd also need to change the email validation, perhaps something like (I havent tried this yet)
+
+validates_uniqueness_of :email ,  :if =&gt; Proc.new { |u| !u.deleted_at.blank? } 
+                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=178" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="179"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="179" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply179" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                    linoj on                 November 06, 2007 03:16 PM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#000">
+                maybe also override find_by_email to actually call find_by_email_and_deleted_at( email, nil )                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=179" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="217"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="217" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply217" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>rick</strong>
+ on                 December 08, 2007 03:28 PM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                Just so you know, I'm adding this to restful auth with a few tweaks (using the deleted_at suggestion, and keeping the aasm default column name 'state'.                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=217" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="228"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="228" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply228" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>Harry</strong>
+ on                 December 10, 2007 11:19 PM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                Thanks for doing this.
+
+One note: I think the user_observer should be changed to UserMailer.deliver_activation(user) if user.active?
+
+Otherwise, since 'pending' is the default, you get the signup email and the activation email both at the same time even though the user hasn't activated the account yet.                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=228" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="229"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="229" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply229" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>Harry</strong>
+ on                 December 10, 2007 11:23 PM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                Sorry, spoke too soon. Rick, it's in your user_observer.rb for the restful authentication plugin.                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=229" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="238"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="238" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply238" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>codepope</strong>
+ on                 December 13, 2007 06:18 AM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                If you change to &quot;UserMailer.deliver_activation(user) if user.active?&quot; it then generates an activation mail each time there's a save on the user record for an active user. This is not good.
+
+Taking the observer out of the equation and wiring the UserMailer calls into the User model kinda works.... (generates 2 activation mails currently... working on that)...
+
+
+
+
+
+                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=238" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="247"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="247" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply247" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>xavier</strong>
+ on                 December 17, 2007 06:40 AM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                I am keeping 'UserMailer.deliver_activation(user) if user.pending?' (out of the box config) but receive both at the same time notification and activation mails automatically. Where is the user.save that triggers the activation mail before the user really activates through the notification link?                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=247" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="248"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="248" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply248" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>Harry</strong>
+ on                 December 18, 2007 01:28 AM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                In case you're interested, I think I have a solution to the activation email problem: <a href="http://harrylove.org/2007/12/17/activation-emails-with-restful-authentication-an" target="_blank">http://harrylove.org/2007/12/17/activation-emails-with-restful-authentication-an</a> d-acts_as_state_machine                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=248" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="290"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="290" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply290" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>jonson</strong>
+ on                 January 06, 2008 09:51 AM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                i tried figuring this out.  it didn't work for me.  the authentication code was never sent to users, becuase you deleted the before_save.  adding that code back into this, helped there.  but in my app, passive is useless.  i guess i can change wherever you have passive to pending and see what happens.  I mean, in my app, no matter how i tried to authenticate a user, the database had my users as passive.  always. thanks                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=290" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="291"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="291" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply291" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>Jamie Kaplan</strong>
+ on                 January 09, 2008 10:36 AM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                Seems to me that acts_as_state_machine is somewhat lacking since it doesn't trigger the code associated with the initial state until AFTER it's saved.  Shouldn't it call said logic on the model just after it's created, but before it's saved?  (I'm trying to sort out the details of what's described above as well (changing active? to pending?, replacing the observer with all-state-machine code, etc.)).  Things are definitely not working as they are.  (of course, thanks to all of those who've gotten us this far!)                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=291" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="317"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="317" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply317" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>emil tin</strong>
+ on                 January 25, 2008 09:14 AM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                In my view, the fundamental problem here is that UserObserver is triggered by things like after_save, etc, but what we really want to observe is changes in the state of the state machine. That's why things get complicated and stop working.
+Acts_as_state_machine already gives us the mechanism to listen for state changes. So a better solution might to send emails directly User, or create a new type of observer class that listens for state changes in acts_as_state_machine model like User. (Although I'm not sure how this would be done technically.) It seems this is in line with that Jamie said above.                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=317" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+    <div class="xar-accent-outline xar-cm-comment">
+    <div>
+         <a name="347"></a>
+                <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" class="xar-cm-actions">
+                    <div>
+                        <input type="hidden" name="header[modid]" value="151" />
+                        <input type="hidden" name="header[itemtype]" value="9" />
+                        <input type="hidden" name="header[objectid]" value="141" />
+                        <input type="hidden" name="header[pid]" value="347" />
+                        <input type="hidden" name="receipt[returnurl][decoded]" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" />
+                        <input type="hidden" name="receipt[returnurl][encoded]" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+                        <input type="hidden" name="receipt[action]" value="reply" /> 
+                        <input type="submit" name="submit" id="submit-reply347" value="Reply" />
+                   </div>
+               </form>
+
+                <h4>stateful authentication</h4>
+<!-- show changelog -->
+<!-- end changelog -->
+           <span class="xar-sub">
+ Posted by: <!-- <pre>ZZZ <xar:set name="asdf">print_r($ii)</xar:set></pre> -->
+<!-- <pre>AAAA <xar:set name="asdf">print_r($p)</xar:set></pre> -->
+                            <strong>Ches</strong>
+ on                 February 28, 2008 05:38 PM</span>
+       </div>
+        <div class="xar-accent xar-cm-comment" style="text-align:left; padding-top:2em; color:#662">
+                I shared this on Harry's blog linked above, where emil posted some code for eliminating the Observer (which is a much cleaner and more sensible approach, thanks!), but for those landing here from Google or Rick Olson's README:
+
+<a href="http://rails.aizatto.com/category/plugins/acts_as_state_machine/" target="_blank">http://rails.aizatto.com/category/plugins/acts_as_state_machine/</a>
+
+The Callbacks section there is the most useful summary reference I've found yet for the different behavior of acts_as_state_machine with new objects vs. existing (saved) records. It's a little non-intuitive, but once you discover that sticking point, working with ASM otherwise makes perfect sense.
+
+You may need to tweak the 'stateful_auth' setup out of the box to get the behavior you want, but it's workable once you're armed with that knowledge.                <p>
+                    <a href="http://www.vaporbase.com/?module=comments&amp;func=display&amp;cid=347" title="Permalink" rel="bookmark">
+                       #
+                   </a>
+               </p>
+
+       </div>
+
+</div>
+
+<script type="text/javascript" src="modules/base/xartemplates/includes/submitonce.js"></script>
+<script type="text/javascript">
+ function checkNotspamBox(f) {
+   if (f.notspam.checked == false) {
+     alert('Hi. Unless you\'re a spam bot, please let us know you are not, by clicking the checkbox.');
+     return false;
+   } else
+     return true;
+ }
+</script>
+  <h3>Post a new comment</h3> 
+  <form action="http://www.vaporbase.com/?module=comments&amp;func=reply" method="post" name="post" id="post" onSubmit="return checkNotspamBox(this) && submitonce(this);" id="post"
+ >
+   <div class="xar-ib-wrapper xar-accent-outline">
+
+<div class="xar-ib-leftpanel">
+         <p>
+           <input type="checkbox" value="0" name="notspam" id="notspam">: <strong>This is not spam</strong>       
+         <p>
+         <p>
+ Name :
+<!-- #$package['name']#  -->
+<!-- <pre><xar:set name="asdf">print_r($properties)</xar:set></pre> -->
+
+<input type="text" name="dd_65" value="" size="50" maxlength="254" id="dd_65" tabindex="1" class="xar-form-textxlong" onfocus="return true;"/>
+</p>
+         <label for="package-title">
+ Title: </label>
+            <input class="xar-ib-field" type="text" name="package[title]" id="package-title" value="stateful authentication" tabindex="1" />
+         <label for="package-text">
+ Comment: </label>
+<textarea class="xar-ib-fieldtext" name="package[text]" id="package-text" tabindex="2"></textarea>
+
+          <input type="hidden" name="header[modid]" id="header-modid" value="151" /> 
+          <input type="hidden" name="header[objectid]" id="header-objectid" value="141" /> 
+          <input type="hidden" name="header[itemtype]" id="header-itemtype" value="9" />
+<input type="hidden" name="header[pid]" id="header-pid" value="0" />
+          <input type="hidden" name="receipt[returnurl][decoded]" id="receipt-returnurl-decoded" value="http://www.vaporbase.com/postings/stateful_authentication?&amp;depth=1&amp;order=1&amp;sortby=2&amp;render=flat" /> 
+          <input type="hidden" name="receipt[returnurl][encoded]" id="receipt-returnurl-encoded" value="http%3A%2F%2Fwww.vaporbase.com%2Fpostings%2Fstateful_authentication%3F%26amp%3Bdepth%3D1%26amp%3Border%3D1%26amp%3Bsortby%3D2%26amp%3Brender%3Dflat" />
+         <input type="hidden" name="receipt[action]" id="receipt-action"/>
+          
+          <input type="submit" id="receipt-action-submit" onclick="document.getElementById('receipt-action').value='submit'" value="Submit" />
+       </div>
+</div>
+ </form>
+														</div>
+					</div>
+							</div>
+
+			<div id="xb-footer">
+				<div id="xb-footer-credits" style="margin-bottom:2em;">
+		<a href="http://www.parkerhill.com">website by parkerhill</a> <a href="http://www.xaraya.com">powered by xaraya</a>
+	</div>
+	
+	<div style="clear:both; margin-top:2em; margin-left: 210px; border:1px solid #999; border-width: 1px 0 0 0;">
+	<p style="color:#aaa; font-size:90%">These ads are provided to demonstrate how good Google is at matching ads to the content of this page :) But feel free to click anyway...</p>
+		<script type="text/javascript"><!--
+		google_ad_client = "pub-4934139458674376";
+		google_ad_width = 468;
+		google_ad_height = 60;
+		google_ad_format = "468x60_as";
+		google_ad_type = "text";
+		//2006-10-20: vaporbase
+		google_ad_channel = "0665870394";
+		google_color_border = "FFFFFF";
+		google_color_bg = "FFFFFF";
+		google_color_link = "445A65";
+		google_color_text = "333333";
+		google_color_url = "999999";
+		//--></script>
+		<script type="text/javascript"
+		  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+	</div>			</div>
+	</div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-687745-4";
+urchinTracker();
+</script>
+</body>
+</html>
